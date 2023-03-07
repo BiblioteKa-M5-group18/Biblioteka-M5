@@ -52,3 +52,9 @@ class UserSerializer(serializers.ModelSerializer):
             user.is_superuser = True
         user.save()
         return user
+
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
