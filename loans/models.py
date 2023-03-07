@@ -21,4 +21,4 @@ class Loan(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.date_limit_return = timezone.now() + timedelta(days=7)
-        super().save(**args, **kwargs)
+        super().save(*args, **kwargs)
