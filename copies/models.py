@@ -26,7 +26,7 @@ class Copy(models.Model):
     user = models.ManyToManyField(
         User,
         through="loans.Loan",
-        related_name="copies"
+        related_name="current_books"
     )
     book = models.ForeignKey(
         "books.Book",

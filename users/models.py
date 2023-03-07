@@ -8,4 +8,3 @@ class User(AbstractUser):
     email = models.EmailField(max_length=150, unique=True)
     is_employee = models.BooleanField(default=False, null=True, blank=True)
     is_blocked = models.BooleanField(default=False, null=True, blank=True)
-    current_books = ArrayField(models.CharField(max_length=200), null=True, blank=True, default=None)
