@@ -16,3 +16,9 @@ class CopySerializer(serializers.ModelSerializer):
         model = Copy
         fields = ["id", 'title', 'author', 'pages', 'publishing_company', 'isbn', "users", "is_loaned", 'book']
         read_only_fields = ["id"]
+
+
+class CopyListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Copy
+        fields = ["id", 'title', 'author', 'pages', 'publishing_company', 'isbn', "is_loaned"]
