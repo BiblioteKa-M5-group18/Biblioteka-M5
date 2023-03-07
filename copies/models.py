@@ -13,7 +13,7 @@ class Copy(models.Model):
         null=True, 
         blank=True
         )
-    user = models.ManyToManyField(
+    users = models.ManyToManyField(
         User,
         through="loans.Loan",
         related_name="current_books"
