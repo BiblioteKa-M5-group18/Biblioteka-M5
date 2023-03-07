@@ -4,8 +4,7 @@ from .models import User
 from loans.serializers import LoansBooksSerializer
 
 
-class UserSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
+class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         validators=[
             UniqueValidator(
@@ -23,11 +22,15 @@ class UserSerializer(serializers.Serializer):
             )
         ]
     )
-    name = serializers.CharField(max_length=200)
     password = serializers.CharField(write_only=True)
-    is_employee = serializers.BooleanField(default=False)
-    is_superuser = serializers.BooleanField(read_only=True)
-    is_blocked = serializers.BooleanField(default=False, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "password", "name", "is_employee", "is_blocked", "is_superuser"]
+        read_only_fields = ["id", "is_blocked", "is_superuser"]
+        extra_kwargs = {
+            "is_employee": {"default": False}
+        }
   
     def create(self, validated_data):
         if validated_data["is_employee"]:
@@ -49,6 +52,7 @@ class UserLoansSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["loans_books"]
+        read_only_fields = ["loans_books"]
 
     def get_loans_books(self, obj):
         if obj.loans_books.exists():
@@ -61,3 +65,4 @@ class IsUserBlockedSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["is_blocked"]
+        read_only_fields = ["is_blocked"]
