@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxLengthValidator
+from users.models import User
 
 
 class Book(models.Model):
@@ -11,3 +12,8 @@ class Book(models.Model):
         ]
     )
     publishing_company = models.CharField(max_length=50)
+    user = models.ManyToManyField(
+        User,
+        through="followings.Following",
+        related_name="books"
+    )

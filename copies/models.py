@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxLengthValidator, MinLengthValidator
+from users.models import User
 
 
 class Copy(models.Model):
@@ -22,6 +23,11 @@ class Copy(models.Model):
         null=True, 
         blank=True
         )
+    user = models.ManyToManyField(
+        User,
+        through="loans.Loan",
+        related_name="copies"
+    )
     book = models.ForeignKey(
         "books.Book",
         on_delete=models.CASCADE,
