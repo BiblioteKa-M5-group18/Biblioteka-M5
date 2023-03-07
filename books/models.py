@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.validators import MaxLengthValidator
 from users.models import User
 
 
