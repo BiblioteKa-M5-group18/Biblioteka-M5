@@ -7,7 +7,7 @@ class Copy(models.Model):
     author = models.CharField(max_length=150)
     pages = models.CharField(max_length=5)
     publishing_company = models.CharField(max_length=50)
-    isbn = models.CharField(max_length=13)
+    isbn = models.CharField(max_length=13, unique=True)
     is_loaned = models.BooleanField(
         default=False, 
         null=True, 
