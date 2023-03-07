@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import User
+from loans.serializers import LoansBooksSerializer
 
 
 class UserSerializer(serializers.Serializer):
@@ -40,3 +41,23 @@ class UserSerializer(serializers.Serializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
+
+
+class UserLoansSerializer(serializers.ModelSerializer):
+    loans_books = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["loans_books"]
+
+    def get_loans_books(self, obj):
+        if obj.loans_books.exists():
+            return LoansBooksSerializer(obj.loans_books.all(), many=True).data
+        else:
+            return []
+
+
+class IsUserBlockedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["is_blocked"]
