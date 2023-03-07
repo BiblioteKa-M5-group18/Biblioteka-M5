@@ -6,6 +6,7 @@ from .serializers import UserLoansSerializer, IsUserBlockedSerializer
 from loans.models import Loan
 from .models import User
 from rest_framework.permissions import IsAdminUser
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class UserCreate(APIView):
@@ -19,6 +20,7 @@ class UserCreate(APIView):
 
 class UserLoans(ListAPIView, PageNumberPagination):
     serializer_class = UserLoansSerializer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
 
     def get_queryset(self):
@@ -28,6 +30,7 @@ class UserLoans(ListAPIView, PageNumberPagination):
 
 class IsUserBlocked(ListAPIView):
     serializer_class = IsUserBlockedSerializer
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
     pagination_class = None
 
