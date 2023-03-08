@@ -13,7 +13,7 @@ class BookCreateView(CreateAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = BookSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         serializer = CopySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         title = serializer.validated_data.get('title')
