@@ -10,7 +10,6 @@ class Copy(models.Model):
     isbn = models.CharField(max_length=13, unique=True)
     is_loaned = models.BooleanField(
         default=False, 
-        null=True, 
         blank=True
         )
     users = models.ManyToManyField(
