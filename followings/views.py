@@ -19,28 +19,22 @@ class FollowingCreate(CreateAPIView):
     def create(self, request, book_id):
         book = get_object_or_404(Book, id=book_id)
 
-        # Verifica se o usuário já está seguindo o livro
         if request.user.following.filter(book=book).exists():
             return Response({"message": "Você já está seguindo este livro."}, status=403)
 
-        # Cria o objeto Following
         following = Following(user=request.user, book=book)
         following.save()
 
-        # Busca todas as cópias do livro
         copies = Copy.objects.filter(book=book)
 
-        # Verifica se todas as cópias estão emprestadas
         all_loaned = all(copy.is_loaned for copy in copies)
         if all_loaned:
-            # Envia mensagem de email informando que o livro está temporariamente indisponível
             subject = f"O livro {book.title} está temporariamente indisponível na BiblioteKA"
             message = f"O livro {book.title} está temporariamente indisponível na BiblioteKA."
             from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [request.user.email]
             send_mail(subject, message, from_email, recipient_list)
         else:
-            # Envia mensagem de email informando que o livro está disponível
             subject = f"O livro {book.title} está disponível na BiblioteKA"
             message = f"O livro {book.title} está disponível na BiblioteKA."
             from_email = settings.DEFAULT_FROM_EMAIL
@@ -61,14 +55,11 @@ class FollowingUpdate(UpdateAPIView):
     def perform_update(self, serializer):
         following = serializer.save()
 
-        # Encontra o livro e todas as cópias
         book = following.book
         copies = Copy.objects.filter(book=book)
 
-        # Verifica se todas as cópias estão emprestadas
         all_loaned = all(copy.is_loaned for copy in copies)
 
-        # Envia mensagem de email informando que o livro está temporariamente indisponível ou disponível
         if all_loaned:
             subject = f"O livro {book.title} está temporariamente indisponível na BiblioteKA"
             message = f"O livro {book.title} está temporariamente indisponível na BiblioteKA."
