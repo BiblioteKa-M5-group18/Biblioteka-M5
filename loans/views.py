@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import status
+from datetime import timedelta
+from django.utils import timezone
 
 class LoanCreateView(CreateAPIView):
     authentication_classes = [JWTAuthentication]
@@ -16,7 +18,11 @@ class LoanCreateView(CreateAPIView):
     def create(self, serializer, isbn):
 
         if self.request.user.is_blocked == True:
-            return Response({'message': 'The user is currently locked.'}, status=status.HTTP_400_BAD_REQUEST)
+            if self.request.user.blocked_until < timezone.now():
+                self.request.user.is_blocked = False
+                self.request.user.blocked_until = None
+            else:
+                return Response({'message': 'The user is currently blocked.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             copy = Copy.objects.get(isbn=isbn)
@@ -62,6 +68,12 @@ class LoanReturnView(UpdateAPIView):
         if loan.date_returned > loan.date_limit_return:
             user = self.request.user
             user.is_blocked = True
+            if (loan.date_returned - loan.date_limit_return) > timedelta(day=1):
+                violated_days = loan.date_returned - loan.date_limit_return
+                punishment = (violated_days*2) + 7
+                user.blocked_until = timedelta(days=punishment)
+            else:
+                user.blocked_until = timezone.now() + timedelta(days=7)
             user.save()
 
         loan.save()

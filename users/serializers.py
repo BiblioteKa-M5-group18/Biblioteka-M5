@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from loans.models import Loan
 from .models import User
 from loans.serializers import LoansBooksSerializer
-
 
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
@@ -50,13 +50,16 @@ class UserLoansSerializer(serializers.ModelSerializer):
     loans_books = serializers.SerializerMethodField()
 
     class Meta:
-        model = User
+        model = Loan
         fields = ["loans_books"]
         read_only_fields = ["loans_books"]
 
     def get_loans_books(self, obj):
-        if obj.loans_books.exists():
-            return LoansBooksSerializer(obj.loans_books.all(), many=True).data
+        user = self.context["request"].user
+        loans = Loan.objects.get(user=user)
+        if loans:
+            # RETORNAR INFOS DE LOAN
+            return loans
         else:
             return []
 

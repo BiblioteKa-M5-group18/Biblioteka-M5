@@ -5,9 +5,9 @@ from rest_framework.generics import ListAPIView
 from .serializers import UserLoansSerializer, IsUserBlockedSerializer
 from loans.models import Loan
 from .models import User
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from .permissions import IsAccountOwner
 
 class UserCreate(APIView):
     def post(self, request):
@@ -21,11 +21,17 @@ class UserCreate(APIView):
 class UserLoans(ListAPIView, PageNumberPagination):
     serializer_class = UserLoansSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAccountOwner]
 
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
-        return Loan.objects.filter(user_id=user_id)
+        self.check_object_permissions(self.request, user_id)
+
+        try:
+            user = User.objects.get(id=user_id)
+            return Loan.objects.filter(user=user)
+        except:
+            return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class IsUserBlocked(ListAPIView):
