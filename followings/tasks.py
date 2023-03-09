@@ -44,7 +44,8 @@ scheduler.add_job(
     check_availability_and_send_emails,
     trigger="interval",
     minutes=1,
-    id="check_availability_and_send_emails"
+    id="check_availability_and_send_emails",
+    replace_existing=True
 )
 
 scheduler.start()
