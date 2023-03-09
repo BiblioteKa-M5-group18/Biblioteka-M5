@@ -12,3 +12,4 @@ class Following(models.Model):
         on_delete=models.CASCADE,
         related_name="following"
         )
+    last_email_sent = models.DateTimeField(null=True, blank=True)
