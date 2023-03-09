@@ -1,4 +1,5 @@
 amqp==5.1.1
+APScheduler==3.10.1
 asgiref==3.6.0
 asttokens==2.2.1
 async-timeout==4.0.2
@@ -12,6 +13,7 @@ click-repl==0.2.0
 colorama==0.4.6
 decorator==5.1.1
 Django==4.1.7
+django-apscheduler==0.6.2
 django-celery-beat==2.4.0
 django-filter==22.1
 django-timezone-field==5.0
@@ -39,6 +41,7 @@ python-crontab==2.7.1
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 pytz==2022.7.1
+pytz-deprecation-shim==0.1.0.post0
 redis==4.5.1
 six==1.16.0
 sqlparse==0.4.3
@@ -46,5 +49,6 @@ stack-data==0.6.2
 tornado==6.2
 traitlets==5.9.0
 tzdata==2022.7
+tzlocal==4.2
 vine==5.0.0
 wcwidth==0.2.6
