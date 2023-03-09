@@ -16,7 +16,7 @@ class BookCreateView(CreateAPIView):
     def create(self, request):
         serializer = CopySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        title = serializer.validated_data.get('title')
+        title = serializer.validated_data.get('title').lower()
         author = serializer.validated_data.get('author')
         pages = serializer.validated_data.get('pages')
         publishing_company = serializer.validated_data.get('publishing_company')

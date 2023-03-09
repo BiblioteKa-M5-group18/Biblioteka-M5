@@ -7,6 +7,7 @@ from loans.models import Loan
 from .models import User
 from rest_framework.permissions import IsAdminUser
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.shortcuts import get_object_or_404
 
 
 class UserCreate(APIView):
@@ -25,6 +26,7 @@ class UserLoans(ListAPIView, PageNumberPagination):
 
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
+        user = get_object_or_404(User, id=user_id)
         return Loan.objects.filter(user_id=user_id)
 
 
@@ -36,4 +38,5 @@ class IsUserBlocked(ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
+        user = get_object_or_404(User, id=user_id)
         return User.objects.filter(id=user_id)
