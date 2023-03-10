@@ -11,7 +11,7 @@ from rest_framework.views import status
 class BookCreateView(CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
-    serializer_class = BookSerializer
+    serializer_class = CopySerializer
 
     def create(self, request):
         serializer = CopySerializer(data=request.data)
