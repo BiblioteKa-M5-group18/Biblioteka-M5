@@ -19,7 +19,7 @@ def check_availability_and_send_emails():
         if all_loaned and following.last_email_sent is None:
             subject = f"Disponibilidade do livro {book.title}"
             message_template = "email/unavailable.txt"
-            message = render_to_string(message_template, {'book': book})
+            message = render_to_string(message_template, {"book": book})
             from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [following.user.email]
             send_mail(subject, message, from_email, recipient_list)
@@ -29,7 +29,7 @@ def check_availability_and_send_emails():
         elif not all_loaned and following.last_email_sent is not None:
             subject = f"Disponibilidade do livro {book.title}"
             message_template = "email/available.txt"
-            message = render_to_string(message_template, {'book': book})
+            message = render_to_string(message_template, {"book": book})
             from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [following.user.email]
             send_mail(subject, message, from_email, recipient_list)
@@ -45,7 +45,7 @@ scheduler.add_job(
     trigger="interval",
     minutes=1,
     id="check_availability_and_send_emails",
-    replace_existing=True
+    replace_existing=True,
 )
 
 scheduler.start()

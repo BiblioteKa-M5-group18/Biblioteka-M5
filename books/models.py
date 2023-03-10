@@ -8,7 +8,5 @@ class Book(models.Model):
     pages = models.CharField(max_length=5)
     publishing_company = models.CharField(max_length=50)
     users = models.ManyToManyField(
-        User,
-        through="followings.Following",
-        related_name="books"
+        User, through="followings.Following", related_name="books"
     )

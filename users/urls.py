@@ -6,5 +6,5 @@ urlpatterns = [
     path("users/", UserCreate.as_view()),
     path("users/login/", TokenObtainPairView.as_view()),
     path("users/<int:user_id>/loans/", UserLoans.as_view()),
-    path("users/<int:user_id>/status/", IsUserBlocked.as_view())
+    path("users/<int:user_id>/status/", IsUserBlocked.as_view()),
 ]

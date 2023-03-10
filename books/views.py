@@ -6,6 +6,7 @@ from copies.serializers import CopySerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.views import status
 
 
 class BookCreateView(CreateAPIView):
@@ -16,14 +17,14 @@ class BookCreateView(CreateAPIView):
     def create(self, request):
         serializer = CopySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        title = serializer.validated_data.get('title').lower()
-        author = serializer.validated_data.get('author')
-        pages = serializer.validated_data.get('pages')
-        publishing_company = serializer.validated_data.get('publishing_company')
-        isbn = serializer.validated_data.get('isbn')
+        title = serializer.validated_data.get("title").lower()
+        author = serializer.validated_data.get("author")
+        pages = serializer.validated_data.get("pages")
+        publishing_company = serializer.validated_data.get("publishing_company")
+        isbn = serializer.validated_data.get("isbn")
 
         if not isbn:
-            return Response({'isbn': 'This field is required.'}, status=400)
+            return Response({"isbn": "This field is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             book = Book.objects.get(title=title)
@@ -32,12 +33,14 @@ class BookCreateView(CreateAPIView):
                 title=title,
                 author=author,
                 pages=pages,
-                publishing_company=publishing_company
+                publishing_company=publishing_company,
             )
 
         try:
             copy = Copy.objects.get(isbn=isbn)
-            return Response({'isbn': 'A copy with this ISBN already exists.'}, status=400)
+            return Response(
+                {"isbn": "A copy with this ISBN already exists."}, status=status.HTTP_400_BAD_REQUEST
+            )
         except Copy.DoesNotExist:
             copy = Copy.objects.create(
                 title=title,
@@ -45,11 +48,9 @@ class BookCreateView(CreateAPIView):
                 pages=pages,
                 publishing_company=publishing_company,
                 isbn=isbn,
-                book=book
+                book=book,
             )
 
         serializer = CopySerializer(copy)
 
-        return Response(serializer.data, status=201)
-
-    
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

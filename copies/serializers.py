@@ -7,18 +7,36 @@ from django.core.validators import RegexValidator
 class CopySerializer(serializers.ModelSerializer):
     book = BookSerializer(read_only=True)
     isbn = serializers.CharField(
-        max_length=13, 
-        validators=[RegexValidator(r'^\d{13}$', 'isbn must be a 13 characteres.')], 
-        required=True
-        )
+        max_length=13,
+        validators=[RegexValidator(r"^\d{13}$", "isbn must be a 13 characteres.")],
+        required=True,
+    )
 
     class Meta:
         model = Copy
-        fields = ["id", 'title', 'author', 'pages', 'publishing_company', 'isbn', "users", "is_loaned", 'book']
+        fields = [
+            "id",
+            "title",
+            "author",
+            "pages",
+            "publishing_company",
+            "isbn",
+            "users",
+            "is_loaned",
+            "book",
+        ]
         read_only_fields = ["id"]
 
 
 class CopyListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Copy
-        fields = ["id", 'title', 'author', 'pages', 'publishing_company', 'isbn', "is_loaned"]
+        fields = [
+            "id",
+            "title",
+            "author",
+            "pages",
+            "publishing_company",
+            "isbn",
+            "is_loaned",
+        ]

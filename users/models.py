@@ -7,3 +7,4 @@ class User(AbstractUser):
     email = models.EmailField(max_length=150, unique=True)
     is_employee = models.BooleanField(default=False, null=True, blank=True)
     is_blocked = models.BooleanField(default=False, null=True, blank=True)
+    blocked_until = models.DateTimeField(default=None, null=True)
