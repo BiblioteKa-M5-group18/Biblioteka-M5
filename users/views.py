@@ -1,6 +1,5 @@
 from rest_framework.views import APIView, Response, status
 from users.serializers import UserSerializer
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
 from .serializers import UserLoansSerializer, IsUserBlockedSerializer
 from loans.models import Loan
@@ -8,6 +7,7 @@ from .models import User
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .permissions import IsAccountOwner
+from django.shortcuts import get_object_or_404
 
 class UserCreate(APIView):
     def post(self, request):
@@ -18,7 +18,7 @@ class UserCreate(APIView):
         return Response(serializer.data, status.HTTP_201_CREATED)
     
 
-class UserLoans(ListAPIView, PageNumberPagination):
+class UserLoans(ListAPIView):
     serializer_class = UserLoansSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated, IsAccountOwner]
@@ -27,11 +27,8 @@ class UserLoans(ListAPIView, PageNumberPagination):
         user_id = self.kwargs["user_id"]
         self.check_object_permissions(self.request, user_id)
 
-        try:
-            user = User.objects.get(id=user_id)
-            return Loan.objects.filter(user=user)
-        except:
-            return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        user = get_object_or_404(User,id=user_id)
+        return Loan.objects.filter(user=user)
 
 
 class IsUserBlocked(ListAPIView):

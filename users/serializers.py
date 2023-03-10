@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from loans.models import Loan
 from .models import User
-from loans.serializers import LoansBooksSerializer
+from copies.serializers import CopyListSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
@@ -47,21 +47,12 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UserLoansSerializer(serializers.ModelSerializer):
-    loans_books = serializers.SerializerMethodField()
+    user = UserSerializer(read_only=True)
+    copy = CopyListSerializer(read_only=True)
 
     class Meta:
         model = Loan
-        fields = ["loans_books"]
-        read_only_fields = ["loans_books"]
-
-    def get_loans_books(self, obj):
-        user = self.context["request"].user
-        loans = Loan.objects.get(user=user)
-        if loans:
-            # RETORNAR INFOS DE LOAN
-            return loans
-        else:
-            return []
+        fields = ["date_collected", "date_limit_return", "date_returned", "user", "copy"]
 
 
 class IsUserBlockedSerializer(serializers.ModelSerializer):
