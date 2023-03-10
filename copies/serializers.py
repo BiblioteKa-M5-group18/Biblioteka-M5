@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Copy
-from books.serializers import BookSerializer
+from books.serializers import BookSerializer, BookToCopySerializer
 from django.core.validators import RegexValidator
 
 
@@ -29,6 +29,7 @@ class CopySerializer(serializers.ModelSerializer):
 
 
 class CopyListSerializer(serializers.ModelSerializer):
+    book = BookToCopySerializer(read_only=True)
     class Meta:
         model = Copy
         fields = [
@@ -39,4 +40,5 @@ class CopyListSerializer(serializers.ModelSerializer):
             "publishing_company",
             "isbn",
             "is_loaned",
+            "book"
         ]
