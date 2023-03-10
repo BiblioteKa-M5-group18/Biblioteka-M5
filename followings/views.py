@@ -8,8 +8,8 @@ from books.models import Book
 from .serializers import FollowingSerializer
 from django.core.mail import send_mail
 from django.conf import settings
-from rest_framework.generics import CreateAPIView, UpdateAPIView
-
+from rest_framework.generics import CreateAPIView
+from rest_framework.views import status
 
 class FollowingCreate(CreateAPIView):
     serializer_class = FollowingSerializer
@@ -20,7 +20,9 @@ class FollowingCreate(CreateAPIView):
         book = get_object_or_404(Book, id=book_id)
 
         if request.user.following.filter(book=book).exists():
-            return Response({"message": "Você já está seguindo este livro."}, status=403)
+            return Response(
+                {"message": "Você já está seguindo este livro."}, status=status.HTTP_403_FORBIDDEN
+            )
 
         following = Following(user=request.user, book=book)
         following.save()
@@ -29,8 +31,12 @@ class FollowingCreate(CreateAPIView):
 
         all_loaned = all(copy.is_loaned for copy in copies)
         if all_loaned:
-            subject = f"O livro {book.title} está temporariamente indisponível na BiblioteKA"
-            message = f"O livro {book.title} está temporariamente indisponível na BiblioteKA."
+            subject = (
+                f"O livro {book.title} está temporariamente indisponível na BiblioteKA"
+            )
+            message = (
+                f"O livro {book.title} está temporariamente indisponível na BiblioteKA."
+            )
             from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [request.user.email]
             send_mail(subject, message, from_email, recipient_list)

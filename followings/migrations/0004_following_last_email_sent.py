@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("followings", "0003_remove_following_email_sent_and_more"),
     ]
