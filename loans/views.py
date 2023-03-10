@@ -47,7 +47,7 @@ class LoanCreateView(CreateAPIView):
 
         if copy.is_loaned == True:
             return Response(
-                {"isbn": "A copy with this ISBN already exists."},
+                {"isbn": "This copy is not available."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
