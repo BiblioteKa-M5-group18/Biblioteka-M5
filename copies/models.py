@@ -1,5 +1,4 @@
 from django.db import models
-from users.models import User
 
 
 class Copy(models.Model):
@@ -13,7 +12,7 @@ class Copy(models.Model):
         blank=True
         )
     users = models.ManyToManyField(
-        User,
+        "users.User",
         through="loans.Loan",
         related_name="current_books"
     )

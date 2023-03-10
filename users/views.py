@@ -39,4 +39,5 @@ class IsUserBlocked(ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
+        user = get_object_or_404(User, id=user_id)
         return User.objects.filter(id=user_id)

@@ -1,35 +1,51 @@
-import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from .models import Following
-from copies.models import Copy
-from celery import shared_task
-from celery.schedules import crontab
-from celery.task import periodic_task
+from django_apscheduler.jobstores import DjangoJobStore
+from pytz import utc
+from django.utils import timezone
 
 
-@shared_task
 def check_availability_and_send_emails():
     followings = Following.objects.all()
 
     for following in followings:
-        copies = Copy.objects.filter(book=following.book)
-
+        book = following.book
+        copies = book.copies.all()
         all_loaned = all(copy.is_loaned for copy in copies)
 
-        if following.is_loaned != all_loaned:
-            following.is_loaned = all_loaned
-            following.save()
-
-            subject = f"O livro {following.book.title} está "
-            message_template = "email/unavailable.txt" if all_loaned else "email/available.txt"
-            message = render_to_string(message_template, {'book': following.book})
+        if all_loaned and following.last_email_sent is None:
+            subject = f"Disponibilidade do livro {book.title}"
+            message_template = "email/unavailable.txt"
+            message = render_to_string(message_template, {'book': book})
             from_email = settings.DEFAULT_FROM_EMAIL
             recipient_list = [following.user.email]
             send_mail(subject, message, from_email, recipient_list)
+            following.last_email_sent = timezone.now()
+            following.save()
+
+        elif not all_loaned and following.last_email_sent is not None:
+            subject = f"Disponibilidade do livro {book.title}"
+            message_template = "email/available.txt"
+            message = render_to_string(message_template, {'book': book})
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [following.user.email]
+            send_mail(subject, message, from_email, recipient_list)
+            following.last_email_sent = None
+            following.save()
 
 
-@periodic_task(run_every=crontab(minute='*/1'))
-def schedule_check_availability_and_send_emails():
-    check_availability_and_send_emails()
+scheduler = BackgroundScheduler(timezone=utc)
+scheduler.add_jobstore(DjangoJobStore(), "default")
+
+scheduler.add_job(
+    check_availability_and_send_emails,
+    trigger="interval",
+    minutes=1,
+    id="check_availability_and_send_emails",
+    replace_existing=True
+)
+
+scheduler.start()

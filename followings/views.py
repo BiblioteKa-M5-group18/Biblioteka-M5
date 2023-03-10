@@ -44,28 +44,3 @@ class FollowingCreate(CreateAPIView):
         following.save()
 
         return Response({"message": "Você agora está seguindo este livro."})
-    
-
-class FollowingUpdate(UpdateAPIView):
-    queryset = Following.objects.all()
-    serializer_class = FollowingSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def perform_update(self, serializer):
-        following = serializer.save()
-
-        book = following.book
-        copies = Copy.objects.filter(book=book)
-
-        all_loaned = all(copy.is_loaned for copy in copies)
-
-        if all_loaned:
-            subject = f"O livro {book.title} está temporariamente indisponível na BiblioteKA"
-            message = f"O livro {book.title} está temporariamente indisponível na BiblioteKA."
-        else:
-            subject = f"O livro {book.title} está disponível na BiblioteKA"
-            message = f"O livro {book.title} está disponível na BiblioteKA."
-        from_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = [self.request.user.email]
-        send_mail(subject, message, from_email, recipient_list)
