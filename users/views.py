@@ -1,6 +1,5 @@
-from rest_framework.views import APIView, Response, status
 from users.serializers import UserSerializer
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView
 from .serializers import UserLoansSerializer, IsUserBlockedSerializer
 from loans.models import Loan
 from .models import User
@@ -9,14 +8,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .permissions import IsAccountOwner
 from django.shortcuts import get_object_or_404
 
-class UserCreate(APIView):
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
 
-        return Response(serializer.data, status.HTTP_201_CREATED)
-    
+class UserCreate(CreateAPIView):
+    serializer_class = UserSerializer
+
 
 class UserLoans(ListAPIView):
     serializer_class = UserLoansSerializer
@@ -27,7 +22,7 @@ class UserLoans(ListAPIView):
         user_id = self.kwargs["user_id"]
         self.check_object_permissions(self.request, user_id)
 
-        user = get_object_or_404(User,id=user_id)
+        user = get_object_or_404(User, id=user_id)
         return Loan.objects.filter(user=user)
 
 
