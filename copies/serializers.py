@@ -3,7 +3,6 @@ from .models import Copy
 from books.serializers import BookSerializer, BookToCopySerializer
 from django.core.validators import RegexValidator
 
-
 class CopySerializer(serializers.ModelSerializer):
     book = BookSerializer(read_only=True)
     isbn = serializers.CharField(

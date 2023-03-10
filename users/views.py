@@ -8,7 +8,6 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .permissions import IsAccountOwner
 from django.shortcuts import get_object_or_404
 
-
 class UserCreate(CreateAPIView):
     serializer_class = UserSerializer
 
