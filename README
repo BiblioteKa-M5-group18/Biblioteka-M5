@@ -11,7 +11,7 @@ cd Biblioteka-M5
 
 3. Crie um ambiente virtual com Python e ative-o:
 
-python3 -m venv venv
+python -m venv venv
 
 source venv/bin/activate
 
