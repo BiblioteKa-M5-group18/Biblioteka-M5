@@ -32,12 +32,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["biblioteka-m5-production.up.railway.app", "0.0.0.0"]
+ALLOWED_HOSTS = []
 
-# RAILWAY_STATIC_URL = os.getenv("RAILWAY_STATIC_URL")
+RAILWAY_STATIC_URL = os.getenv("RAILWAY_STATIC_URL")
 
-# if RAILWAY_STATIC_URL:
-#     ALLOWED_HOSTS += [RAILWAY_STATIC_URL, "0.0.0.0"]
+if RAILWAY_STATIC_URL:
+    ALLOWED_HOSTS += [RAILWAY_STATIC_URL, "0.0.0.0"]
 
 
 # Application definition
@@ -207,9 +207,9 @@ SPECTACULAR_SETTINGS = {
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "balderbasenji@gmail.com"
-EMAIL_HOST_PASSWORD = "Senha123@"
+EMAIL_HOST_USER = "arimoncaojr@gmail.com"
+EMAIL_HOST_PASSWORD = "vqkiyhmcsruqfipj"
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "balderbasenji@gmail.com"
+DEFAULT_FROM_EMAIL = "arimoncaojr@gmail.com"
 
 SCHEDULER_AUTO_START = False
