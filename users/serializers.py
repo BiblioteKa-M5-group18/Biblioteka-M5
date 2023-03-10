@@ -4,7 +4,6 @@ from loans.models import Loan
 from .models import User
 from copies.serializers import CopyListSerializer
 
-
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         validators=[
