@@ -24,7 +24,7 @@ class CopySerializer(serializers.ModelSerializer):
             "is_loaned",
             "book",
         ]
-        read_only_fields = ["id"]
+        read_only_fields = ["id", "is_loaned"]
 
 
 class CopyListSerializer(serializers.ModelSerializer):
@@ -41,3 +41,5 @@ class CopyListSerializer(serializers.ModelSerializer):
             "is_loaned",
             "book"
         ]
+        
+        read_only_fields = ["id", "is_loaned"]
