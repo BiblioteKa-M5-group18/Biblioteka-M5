@@ -2,7 +2,6 @@ from django.db import models
 from datetime import timedelta
 from django.utils import timezone
 
-
 class Loan(models.Model):
     date_collected = models.DateTimeField(auto_now_add=True)
     date_limit_return = models.DateTimeField(null=True, blank=True)

@@ -3,7 +3,6 @@ from .models import Loan
 from users.serializers import UserSerializer
 from copies.serializers import CopyListSerializer
 
-
 class LoansBooksSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Loan.objects.create(**validated_data)

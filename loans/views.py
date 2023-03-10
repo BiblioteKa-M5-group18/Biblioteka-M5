@@ -10,7 +10,6 @@ from rest_framework import status
 from datetime import timedelta, date
 from django.utils import timezone
 
-
 class LoanCreateView(CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
