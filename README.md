@@ -15,10 +15,10 @@ python -m venv venv
 
 source venv/bin/activate
 
-4.Instale as dependências listadas no arquivo requirements.txt:
+4. Instale as dependências listadas no arquivo requirements.txt:
 
 pip install -r requirements.txt
 
-5.Execute as migrações do banco de dados:
+5. Execute as migrações do banco de dados:
 
 python manage.py migrate
