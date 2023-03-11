@@ -207,9 +207,9 @@ SPECTACULAR_SETTINGS = {
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "arimoncaojr@gmail.com"
-EMAIL_HOST_PASSWORD = "vqkiyhmcsruqfipj"
+EMAIL_HOST_USER = "balderbesenji@gmail.com"
+EMAIL_HOST_PASSWORD = "wansxcxnigntgzdk"
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "arimoncaojr@gmail.com"
+DEFAULT_FROM_EMAIL = "balderbesenji@gmail.com"
 
 SCHEDULER_AUTO_START = False
