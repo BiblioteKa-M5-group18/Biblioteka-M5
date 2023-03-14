@@ -1,4 +1,3 @@
-Como clonar e configurar o ambiente virtual
 Para clonar o repositório e configurar o ambiente virtual, siga os passos abaixo:
 
 1. Clone o repositório utilizando a chave SSH:
